@@ -41,11 +41,7 @@
       flex-direction: column;
       align-items: center;
       box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-      transition: opacity 0.5s ease;
-    }
-
-    .fade-out {
-      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
     .huruf-box {
@@ -72,7 +68,7 @@
     .btn-lupa { background-color: #dda15e; }
     .btn-dengar { background-color: #f8961e; }
 
-    .reset-btn {
+    .reset-btn, .simpan-btn {
       background-color: #6a994e;
       color: white;
       padding: 10px 18px;
@@ -80,10 +76,10 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      margin-top: 10px;
+      margin: 10px 5px;
     }
 
-    .reset-btn:hover {
+    .reset-btn:hover, .simpan-btn:hover {
       opacity: 0.9;
     }
 
@@ -93,54 +89,29 @@
       font-size: 20px;
       color: #283618;
     }
-    .markah-btn {
-  background-color: #f94144;
-  color: white;
-  padding: 8px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 10px 0;
-  transition: background-color 0.3s ease;
-}
-
-.markah-btn:hover {
-  background-color: #d62828;
-}
-
   </style>
 </head>
 <body>
 
   <h1>Iqra 1: Huruf Fathah</h1>
 
-  <div class="prestasi" id="markahLepasContainer">
-    📊 Markah lepas: 0
-  </div>
-
   <div class="prestasi" id="prestasiContainer">
     ✅ Huruf ditekan: 0 | ⏳ Belum ditekan: 28
   </div>
 
-  <div class="huruf-container" id="hurufContainer">
-    <!-- Huruf-huruf asal -->
-  </div>
+  <div class="huruf-container" id="hurufContainer"></div>
 
   <div class="section-title">🧠 Huruf yang dilupa</div>
-  <div class="lupa-container" id="lupaContainer">
-    <!-- Huruf yang 'lupa' akan muncul di sini -->
-  </div>
-  <button class="markah-btn" onclick="simpanMarkahManual()">💾 Simpan Markah</button>
+  <div class="lupa-container" id="lupaContainer"></div>
 
   <button class="reset-btn" onclick="resetHuruf()">Reset</button>
+  <button class="simpan-btn" onclick="simpanPrestasi()">Simpan Prestasi</button>
 
   <script>
     const hurufList = ["أَ", "بَ", "تَ", "ثَ", "جَ", "حَ", "خَ", "دَ", "ذَ", "رَ", "زَ", "سَ", "شَ", "صَ", "ضَ", "طَ", "ظَ", "عَ", "غَ", "فَ", "قَ", "كَ", "لَ", "مَ", "نَ", "هَ", "وَ", "يَ"];
     const hurufContainer = document.getElementById('hurufContainer');
     const lupaContainer = document.getElementById('lupaContainer');
     const prestasiContainer = document.getElementById('prestasiContainer');
-    const markahLepasContainer = document.getElementById('markahLepasContainer');
 
     let hurufStates = [];
 
@@ -163,28 +134,22 @@
         const lupaBtn = document.createElement('button');
         lupaBtn.textContent = 'Lupa';
         lupaBtn.className = 'btn-lupa';
-        lupaBtn.onclick = (e) => {
-          e.stopPropagation(); // Elak dari trigger fade-out
-          tambahKeLupa(huruf);
-        };
+        lupaBtn.onclick = () => tambahKeLupa(huruf);
 
         const dengarBtn = document.createElement('button');
         dengarBtn.textContent = 'Dengar';
         dengarBtn.className = 'btn-dengar';
-        dengarBtn.onclick = (e) => {
-          e.stopPropagation();
-          mainkanAudio(huruf);
-        };
+        dengarBtn.onclick = () => mainkanAudio(huruf);
 
         buttons.appendChild(lupaBtn);
         buttons.appendChild(dengarBtn);
 
         box.onclick = () => {
-          card.classList.add('fade-out');
+          card.style.opacity = '0';
           setTimeout(() => {
             card.style.display = 'none';
             tambahKePrestasi(index);
-          }, 500);
+          }, 400);
         };
 
         card.appendChild(box);
@@ -195,10 +160,15 @@
       });
 
       kemaskiniPrestasi();
-      paparMarkahLepas();
     }
 
     function tambahKeLupa(huruf) {
+      const lupaData = JSON.parse(localStorage.getItem('lupaHuruf')) || [];
+      if (!lupaData.includes(huruf)) {
+        lupaData.push(huruf);
+        localStorage.setItem('lupaHuruf', JSON.stringify(lupaData));
+      }
+
       const lupaBox = document.createElement('div');
       lupaBox.className = 'huruf-card';
       lupaBox.innerHTML = `<div class="huruf-box">${huruf}</div>`;
@@ -206,7 +176,6 @@
     }
 
     function mainkanAudio(huruf) {
-      // Audio boleh dipadankan ikut huruf
       const audioUrl = `https://example.com/audio/${encodeURIComponent(huruf)}.mp3`;
       const audio = new Audio(audioUrl);
       audio.play();
@@ -221,35 +190,44 @@
       const ditekan = hurufStates.filter(h => h.hidden).length;
       const belum = hurufStates.length - ditekan;
       prestasiContainer.textContent = `✅ Huruf ditekan: ${ditekan} | ⏳ Belum ditekan: ${belum}`;
-      simpanMarkah(ditekan);
-    }
-
-    function simpanMarkah(markah) {
-      localStorage.setItem('markahIqra1', markah);
-    }
-
-    function dapatkanMarkah() {
-      return localStorage.getItem('markahIqra1') || 0;
-    }
-
-    function paparMarkahLepas() {
-      const markah = dapatkanMarkah();
-      markahLepasContainer.textContent = `📊 Markah lepas: ${markah}`;
     }
 
     function resetHuruf() {
+      localStorage.removeItem('prestasi');
+      localStorage.removeItem('lupaHuruf');
       janaHuruf();
+      muatSemulaLupa();
     }
-    function simpanMarkahManual() {
-  const ditekan = hurufStates.filter(h => h.hidden).length;
-  simpanMarkah(ditekan);
-  paparMarkahLepas();
-  alert(`Markah telah disimpan: ${ditekan} huruf ditekan ✅`);
-}
 
+    function simpanPrestasi() {
+      const ditekan = hurufStates.filter(h => h.hidden).length;
+      const belum = hurufStates.length - ditekan;
+      localStorage.setItem('prestasi', JSON.stringify({ ditekan, belum }));
+      alert("Prestasi telah disimpan!");
+    }
+
+    function muatSemulaPrestasi() {
+      const data = JSON.parse(localStorage.getItem('prestasi'));
+      if (data) {
+        prestasiContainer.textContent = `✅ Huruf ditekan: ${data.ditekan} | ⏳ Belum ditekan: ${data.belum}`;
+      }
+    }
+
+    function muatSemulaLupa() {
+      const lupaData = JSON.parse(localStorage.getItem('lupaHuruf')) || [];
+      lupaContainer.innerHTML = '';
+      lupaData.forEach(huruf => {
+        const lupaBox = document.createElement('div');
+        lupaBox.className = 'huruf-card';
+        lupaBox.innerHTML = `<div class="huruf-box">${huruf}</div>`;
+        lupaContainer.appendChild(lupaBox);
+      });
+    }
 
     // Mula
     janaHuruf();
+    muatSemulaLupa();
+    muatSemulaPrestasi();
   </script>
 
 </body>

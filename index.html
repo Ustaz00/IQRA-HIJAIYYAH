@@ -93,6 +93,22 @@
       font-size: 20px;
       color: #283618;
     }
+    .markah-btn {
+  background-color: #f94144;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+.markah-btn:hover {
+  background-color: #d62828;
+}
+
   </style>
 </head>
 <body>
@@ -115,6 +131,7 @@
   <div class="lupa-container" id="lupaContainer">
     <!-- Huruf yang 'lupa' akan muncul di sini -->
   </div>
+  <button class="markah-btn" onclick="simpanMarkahManual()">💾 Simpan Markah</button>
 
   <button class="reset-btn" onclick="resetHuruf()">Reset</button>
 
@@ -223,6 +240,13 @@
     function resetHuruf() {
       janaHuruf();
     }
+    function simpanMarkahManual() {
+  const ditekan = hurufStates.filter(h => h.hidden).length;
+  simpanMarkah(ditekan);
+  paparMarkahLepas();
+  alert(`Markah telah disimpan: ${ditekan} huruf ditekan ✅`);
+}
+
 
     // Mula
     janaHuruf();

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar Huruf Iqra</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #fefae0;
+      color: #283618;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    .huruf {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.3s;
+      position: relative;
+    }
+    .card:hover {
+      transform: scale(1.1);
+    }
+    .tanda-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #fca311;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    #senaraiLupa {
+      margin-top: 3rem;
+    }
+    .huruf-lupa {
+      display: inline-block;
+      background: #e63946;
+      color: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 0.5rem;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Belajar Huruf Iqra</h1>
+  <p>Klik huruf untuk dengar sebutan. Jika lupa, tekan "Lupa" untuk tandakan.</p>
+
+  <div class="huruf" id="ruanganHuruf">
+    <div class="card" onclick="sebut(this, 'alif')">ا
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ا')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'ba')">ب
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ب')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'ta')">ت
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ت')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'tha')">ث
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ث')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'jim')">ج
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ج')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'ha')">ح
+      <button class="tanda-btn" onclick="tandaLupa(event, 'ح')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'kho')">خ
+      <button class="tanda-btn" onclick="tandaLupa(event, 'خ')">Lupa</button>
+    </div>
+    <div class="card" onclick="sebut(this, 'dal')">د
+      <button class="tanda-btn" onclick="tandaLupa(event, 'د')">Lupa</button>
+    </div>
+  </div>
+
+  <h2>Huruf yang saya lupa:</h2>
+  <div id="senaraiLupa"></div>
+
+  <audio id="audio"></audio>
+
+  <script>
+    function sebut(elem, namaHuruf) {
+      const audio = document.getElementById('audio');
+      audio.src = `audio/${namaHuruf}.mp3`;
+      audio.play();
+      // Sembunyikan selepas ditekan
+      elem.style.opacity = '0';
+      setTimeout(() => {
+        elem.style.display = 'none';
+      }, 300);
+    }
+
+    function tandaLupa(event, huruf) {
+      event.stopPropagation(); // Elak trigger bunyi bila tekan butang
+      const senarai = document.getElementById('senaraiLupa');
+      const span = document.createElement('span');
+      span.className = 'huruf-lupa';
+      span.textContent = huruf;
+      senarai.appendChild(span);
+    }
+  </script>
+</body>
+</html>

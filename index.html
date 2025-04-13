@@ -16,9 +16,6 @@
     h1 {
       color: #606c38;
     }
-    <div class="prestasi" id="markahLepasContainer">
-  📊 Markah lepas: 0
-</div>
 
     .prestasi {
       margin: 10px 0;
@@ -44,6 +41,11 @@
       flex-direction: column;
       align-items: center;
       box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      transition: opacity 0.5s ease;
+    }
+
+    .fade-out {
+      opacity: 0;
     }
 
     .huruf-box {
@@ -91,27 +93,15 @@
       font-size: 20px;
       color: #283618;
     }
-
-    /* Animasi fade-out */
-    .fade-out {
-      animation: fadeOut 1s forwards;
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        display: none;
-      }
-    }
-
   </style>
 </head>
 <body>
 
   <h1>Iqra 1: Huruf Fathah</h1>
+
+  <div class="prestasi" id="markahLepasContainer">
+    📊 Markah lepas: 0
+  </div>
 
   <div class="prestasi" id="prestasiContainer">
     ✅ Huruf ditekan: 0 | ⏳ Belum ditekan: 28
@@ -133,35 +123,10 @@
     const hurufContainer = document.getElementById('hurufContainer');
     const lupaContainer = document.getElementById('lupaContainer');
     const prestasiContainer = document.getElementById('prestasiContainer');
+    const markahLepasContainer = document.getElementById('markahLepasContainer');
 
     let hurufStates = [];
 
-    // Fungsi untuk menyimpan markah
-    function simpanMarkah() {
-      localStorage.setItem('markah', hurufStates.filter(h => h.hidden).length);
-    }
-
-    // Fungsi untuk mendapatkan markah dari localStorage
-    function dapatkanMarkah() {
-      return parseInt(localStorage.getItem('markah') || '0');
-    }
-
-    // Fungsi untuk kemaskini prestasi
-    function kemaskiniPrestasi() {
-      const ditekan = hurufStates.filter(h => h.hidden).length;
-      const belum = hurufStates.length - ditekan;
-      prestasiContainer.textContent = `✅ Huruf ditekan: ${ditekan} | ⏳ Belum ditekan: ${belum}`;
-      simpanMarkah(); // Simpan markah ke localStorage
-    }
-
-    // Fungsi untuk reset sesi
-    function resetHuruf() {
-      hurufStates = [];
-      localStorage.removeItem('markah'); // Padam data markah yang lama
-      janaHuruf(); // Mulakan semula sesi
-    }
-
-    // Fungsi utama untuk jana huruf
     function janaHuruf() {
       hurufContainer.innerHTML = '';
       lupaContainer.innerHTML = '';
@@ -181,24 +146,28 @@
         const lupaBtn = document.createElement('button');
         lupaBtn.textContent = 'Lupa';
         lupaBtn.className = 'btn-lupa';
-        lupaBtn.onclick = () => tambahKeLupa(huruf);
+        lupaBtn.onclick = (e) => {
+          e.stopPropagation(); // Elak dari trigger fade-out
+          tambahKeLupa(huruf);
+        };
 
         const dengarBtn = document.createElement('button');
         dengarBtn.textContent = 'Dengar';
         dengarBtn.className = 'btn-dengar';
-        dengarBtn.onclick = () => mainkanAudio(huruf);
+        dengarBtn.onclick = (e) => {
+          e.stopPropagation();
+          mainkanAudio(huruf);
+        };
 
         buttons.appendChild(lupaBtn);
         buttons.appendChild(dengarBtn);
 
         box.onclick = () => {
-          card.classList.add('fade-out'); // Menambah animasi fade-out
+          card.classList.add('fade-out');
           setTimeout(() => {
-            card.style.display = 'none'; // Hilangkan huruf selepas animasi
-            tambahKePrestasi(index); // Tambah ke dalam prestasi
-          }, 1000); // Waktu animasi fade-out
-
-          kemaskiniPrestasi(); // Kemaskini prestasi setiap kali huruf ditekan
+            card.style.display = 'none';
+            tambahKePrestasi(index);
+          }, 500);
         };
 
         card.appendChild(box);
@@ -209,9 +178,9 @@
       });
 
       kemaskiniPrestasi();
+      paparMarkahLepas();
     }
 
-    // Fungsi untuk menambah huruf ke dalam 'Lupa' list
     function tambahKeLupa(huruf) {
       const lupaBox = document.createElement('div');
       lupaBox.className = 'huruf-card';
@@ -219,7 +188,6 @@
       lupaContainer.appendChild(lupaBox);
     }
 
-    // Fungsi untuk mainkan audio huruf
     function mainkanAudio(huruf) {
       // Audio boleh dipadankan ikut huruf
       const audioUrl = `https://example.com/audio/${encodeURIComponent(huruf)}.mp3`;
@@ -227,23 +195,37 @@
       audio.play();
     }
 
-    // Fungsi untuk menambah ke prestasi
     function tambahKePrestasi(index) {
       hurufStates[index].hidden = true;
       kemaskiniPrestasi();
     }
 
-    // Panggil fungsi untuk paparkan markah sesi lepas
-    kemaskiniPrestasi();
-    function paparMarkahLepas() {
-  const lepas = dapatkanMarkah();
-  const markahLepasContainer = document.getElementById('markahLepasContainer');
-  markahLepasContainer.textContent = `📊 Markah lepas: ${lepas}`;
-}
+    function kemaskiniPrestasi() {
+      const ditekan = hurufStates.filter(h => h.hidden).length;
+      const belum = hurufStates.length - ditekan;
+      prestasiContainer.textContent = `✅ Huruf ditekan: ${ditekan} | ⏳ Belum ditekan: ${belum}`;
+      simpanMarkah(ditekan);
+    }
 
+    function simpanMarkah(markah) {
+      localStorage.setItem('markahIqra1', markah);
+    }
+
+    function dapatkanMarkah() {
+      return localStorage.getItem('markahIqra1') || 0;
+    }
+
+    function paparMarkahLepas() {
+      const markah = dapatkanMarkah();
+      markahLepasContainer.textContent = `📊 Markah lepas: ${markah}`;
+    }
+
+    function resetHuruf() {
+      janaHuruf();
+    }
+
+    // Mula
     janaHuruf();
-    paparMarkahLepas();
-    
   </script>
 
 </body>

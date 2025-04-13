@@ -1,121 +1,250 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Belajar Huruf Iqra</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iqra 1 - Huruf Fathah</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       text-align: center;
-      background: #fefae0;
-      color: #283618;
-      padding: 2rem;
+      background-color: #fefae0;
+      margin: 0;
+      padding: 20px;
     }
+
     h1 {
-      font-size: 2rem;
+      color: #606c38;
     }
-    .huruf {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-top: 2rem;
+    <div class="prestasi" id="markahLepasContainer">
+  📊 Markah lepas: 0
+</div>
+
+    .prestasi {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #333;
     }
-    .card {
-      background: #fff;
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      font-size: 2rem;
+
+    .huruf-container, .lupa-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .huruf-card {
+      background-color: #fff;
+      border: 2px solid #bc6c25;
+      border-radius: 12px;
+      padding: 12px;
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .huruf-box {
+      font-size: 36px;
+      margin-bottom: 10px;
       cursor: pointer;
-      transition: transform 0.2s, opacity 0.3s;
-      position: relative;
     }
-    .card:hover {
+
+    .huruf-box:hover {
       transform: scale(1.1);
     }
-    .tanda-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: #fca311;
+
+    .huruf-buttons button {
+      padding: 4px 8px;
+      font-size: 12px;
+      margin: 2px;
       border: none;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 0.5rem;
-      font-size: 0.8rem;
+      border-radius: 6px;
       cursor: pointer;
-    }
-    #senaraiLupa {
-      margin-top: 3rem;
-    }
-    .huruf-lupa {
-      display: inline-block;
-      background: #e63946;
+      transition: background-color 0.2s ease;
       color: white;
-      padding: 1rem;
-      border-radius: 1rem;
-      margin: 0.5rem;
-      font-size: 1.5rem;
     }
+
+    .btn-lupa { background-color: #dda15e; }
+    .btn-dengar { background-color: #f8961e; }
+
+    .reset-btn {
+      background-color: #6a994e;
+      color: white;
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .reset-btn:hover {
+      opacity: 0.9;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 30px;
+      font-size: 20px;
+      color: #283618;
+    }
+
+    /* Animasi fade-out */
+    .fade-out {
+      animation: fadeOut 1s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        display: none;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <h1>Belajar Huruf Iqra</h1>
-  <p>Klik huruf untuk dengar sebutan. Jika lupa, tekan "Lupa" untuk tandakan.</p>
 
-  <div class="huruf" id="ruanganHuruf">
-    <div class="card" onclick="sebut(this, 'alif')">ا
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ا')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'ba')">ب
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ب')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'ta')">ت
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ت')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'tha')">ث
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ث')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'jim')">ج
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ج')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'ha')">ح
-      <button class="tanda-btn" onclick="tandaLupa(event, 'ح')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'kho')">خ
-      <button class="tanda-btn" onclick="tandaLupa(event, 'خ')">Lupa</button>
-    </div>
-    <div class="card" onclick="sebut(this, 'dal')">د
-      <button class="tanda-btn" onclick="tandaLupa(event, 'د')">Lupa</button>
-    </div>
+  <h1>Iqra 1: Huruf Fathah</h1>
+
+  <div class="prestasi" id="prestasiContainer">
+    ✅ Huruf ditekan: 0 | ⏳ Belum ditekan: 28
   </div>
 
-  <h2>Huruf yang saya lupa:</h2>
-  <div id="senaraiLupa"></div>
+  <div class="huruf-container" id="hurufContainer">
+    <!-- Huruf-huruf asal -->
+  </div>
 
-  <audio id="audio"></audio>
+  <div class="section-title">🧠 Huruf yang dilupa</div>
+  <div class="lupa-container" id="lupaContainer">
+    <!-- Huruf yang 'lupa' akan muncul di sini -->
+  </div>
+
+  <button class="reset-btn" onclick="resetHuruf()">Reset</button>
 
   <script>
-    function sebut(elem, namaHuruf) {
-      const audio = document.getElementById('audio');
-      audio.src = `audio/${namaHuruf}.mp3`;
-      audio.play();
-      // Sembunyikan selepas ditekan
-      elem.style.opacity = '0';
-      setTimeout(() => {
-        elem.style.display = 'none';
-      }, 300);
+    const hurufList = ["أَ", "بَ", "تَ", "ثَ", "جَ", "حَ", "خَ", "دَ", "ذَ", "رَ", "زَ", "سَ", "شَ", "صَ", "ضَ", "طَ", "ظَ", "عَ", "غَ", "فَ", "قَ", "كَ", "لَ", "مَ", "نَ", "هَ", "وَ", "يَ"];
+    const hurufContainer = document.getElementById('hurufContainer');
+    const lupaContainer = document.getElementById('lupaContainer');
+    const prestasiContainer = document.getElementById('prestasiContainer');
+
+    let hurufStates = [];
+
+    // Fungsi untuk menyimpan markah
+    function simpanMarkah() {
+      localStorage.setItem('markah', hurufStates.filter(h => h.hidden).length);
     }
 
-    function tandaLupa(event, huruf) {
-      event.stopPropagation(); // Elak trigger bunyi bila tekan butang
-      const senarai = document.getElementById('senaraiLupa');
-      const span = document.createElement('span');
-      span.className = 'huruf-lupa';
-      span.textContent = huruf;
-      senarai.appendChild(span);
+    // Fungsi untuk mendapatkan markah dari localStorage
+    function dapatkanMarkah() {
+      return parseInt(localStorage.getItem('markah') || '0');
     }
+
+    // Fungsi untuk kemaskini prestasi
+    function kemaskiniPrestasi() {
+      const ditekan = hurufStates.filter(h => h.hidden).length;
+      const belum = hurufStates.length - ditekan;
+      prestasiContainer.textContent = `✅ Huruf ditekan: ${ditekan} | ⏳ Belum ditekan: ${belum}`;
+      simpanMarkah(); // Simpan markah ke localStorage
+    }
+
+    // Fungsi untuk reset sesi
+    function resetHuruf() {
+      hurufStates = [];
+      localStorage.removeItem('markah'); // Padam data markah yang lama
+      janaHuruf(); // Mulakan semula sesi
+    }
+
+    // Fungsi utama untuk jana huruf
+    function janaHuruf() {
+      hurufContainer.innerHTML = '';
+      lupaContainer.innerHTML = '';
+      hurufStates = [];
+
+      hurufList.forEach((huruf, index) => {
+        const card = document.createElement('div');
+        card.className = 'huruf-card';
+
+        const box = document.createElement('div');
+        box.className = 'huruf-box';
+        box.textContent = huruf;
+
+        const buttons = document.createElement('div');
+        buttons.className = 'huruf-buttons';
+
+        const lupaBtn = document.createElement('button');
+        lupaBtn.textContent = 'Lupa';
+        lupaBtn.className = 'btn-lupa';
+        lupaBtn.onclick = () => tambahKeLupa(huruf);
+
+        const dengarBtn = document.createElement('button');
+        dengarBtn.textContent = 'Dengar';
+        dengarBtn.className = 'btn-dengar';
+        dengarBtn.onclick = () => mainkanAudio(huruf);
+
+        buttons.appendChild(lupaBtn);
+        buttons.appendChild(dengarBtn);
+
+        box.onclick = () => {
+          card.classList.add('fade-out'); // Menambah animasi fade-out
+          setTimeout(() => {
+            card.style.display = 'none'; // Hilangkan huruf selepas animasi
+            tambahKePrestasi(index); // Tambah ke dalam prestasi
+          }, 1000); // Waktu animasi fade-out
+
+          kemaskiniPrestasi(); // Kemaskini prestasi setiap kali huruf ditekan
+        };
+
+        card.appendChild(box);
+        card.appendChild(buttons);
+
+        hurufContainer.appendChild(card);
+        hurufStates.push({ element: card, hidden: false });
+      });
+
+      kemaskiniPrestasi();
+    }
+
+    // Fungsi untuk menambah huruf ke dalam 'Lupa' list
+    function tambahKeLupa(huruf) {
+      const lupaBox = document.createElement('div');
+      lupaBox.className = 'huruf-card';
+      lupaBox.innerHTML = `<div class="huruf-box">${huruf}</div>`;
+      lupaContainer.appendChild(lupaBox);
+    }
+
+    // Fungsi untuk mainkan audio huruf
+    function mainkanAudio(huruf) {
+      // Audio boleh dipadankan ikut huruf
+      const audioUrl = `https://example.com/audio/${encodeURIComponent(huruf)}.mp3`;
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+
+    // Fungsi untuk menambah ke prestasi
+    function tambahKePrestasi(index) {
+      hurufStates[index].hidden = true;
+      kemaskiniPrestasi();
+    }
+
+    // Panggil fungsi untuk paparkan markah sesi lepas
+    kemaskiniPrestasi();
+    function paparMarkahLepas() {
+  const lepas = dapatkanMarkah();
+  const markahLepasContainer = document.getElementById('markahLepasContainer');
+  markahLepasContainer.textContent = `📊 Markah lepas: ${lepas}`;
+}
+
+    janaHuruf();
+    paparMarkahLepas();
+    
   </script>
+
 </body>
 </html>
